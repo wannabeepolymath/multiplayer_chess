@@ -7,9 +7,6 @@ on:
     branches: [master, main]
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,8 +26,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:${{ github.sha }}
 
       # Kubernetes deployment steps commented out until a cluster is configured
       # - uses: azure/setup-kubectl@v3
@@ -40,5 +37,5 @@ jobs:
       #     echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
       # - name: Deploy
       #   run: |
-      #     sed -i "s|IMAGE_PLACEHOLDER|${{ env.IMAGE_NAME }}:latest|g" k8s/deployment.yaml
+      #     sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:latest|g" k8s/deployment.yaml
       #     kubectl apply -f k8s/
