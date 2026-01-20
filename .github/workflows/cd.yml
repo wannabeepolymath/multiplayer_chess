@@ -29,13 +29,13 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:${{ github.sha }}
 
-      # Kubernetes deployment steps commented out until a cluster is configured
-      # - uses: azure/setup-kubectl@v3
-      # - name: Configure kubeconfig
-      #   run: |
-      #     mkdir -p $HOME/.kube
-      #     echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
-      # - name: Deploy
-      #   run: |
-      #     sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:latest|g" k8s/deployment.yaml
-      #     kubectl apply -f k8s/
+      # Kubernetes deployment steps
+      - uses: azure/setup-kubectl@v3
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+      - name: Deploy
+        run: |
+          sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess:latest|g" k8s/deployment.yaml
+          kubectl apply -f k8s/
