@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chess-backend
+  name: multiplayer-chess
   labels:
-    app: chess-backend
+    app: multiplayer-chess
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: chess-backend
+      app: multiplayer-chess
   template:
     metadata:
       labels:
-        app: chess-backend
+        app: multiplayer-chess
     spec:
       containers:
-        - name: chess-backend
+        - name: multiplayer-chess
           image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 8081

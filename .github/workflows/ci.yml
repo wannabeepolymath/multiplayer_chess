@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/chess-backend
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/multiplayer-chess
 
 jobs:
   # Build, Lint, Test

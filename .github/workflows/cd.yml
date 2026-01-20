@@ -31,5 +31,5 @@ jobs:
 
       - name: Verify
         run: |
-          kubectl rollout status deployment/chess-backend --timeout=120s
-          kubectl get pods -l app=chess-backend
+          kubectl rollout status deployment/multiplayer-chess --timeout=120s
+          kubectl get pods -l app=multiplayer-chess
