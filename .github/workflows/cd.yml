@@ -1,0 +1,35 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
+    branches: [master, main]
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/chess-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-kubectl@v3
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+
+      - name: Deploy
+        run: |
+          sed -i "s|IMAGE_PLACEHOLDER|${{ env.IMAGE_NAME }}:latest|g" k8s/deployment.yaml
+          kubectl apply -f k8s/
+
+      - name: Verify
+        run: |
+          kubectl rollout status deployment/chess-backend --timeout=120s
+          kubectl get pods -l app=chess-backend
